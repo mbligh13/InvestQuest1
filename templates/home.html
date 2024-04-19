@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome, {{ username }}!</h1>
+    <p>This is your personal dashboard.</p>
+    <form action="/search_stocks" method="post">
+        <input type="text" name="symbol" placeholder="Enter Stock Symbol" required>
+        <button type="submit">Get Stock Info</button>
+    </form>
+</body>
+</html>
+
+
+
+

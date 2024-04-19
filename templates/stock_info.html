@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Information</title>
+</head>
+<body>
+    <h1>Stock Information</h1>
+    {% if info %}
+        <p><strong>Symbol:</strong> {{ info['symbol'] }}</p>
+        <p><strong>Price:</strong> {{ info.get('regularMarketPrice', 'Unavailable') }}</p>
+        <p><strong>Company:</strong> {{ info.get('longName', 'Unavailable') }}</p>
+    {% else %}
+        <p>No information available for the provided symbol.</p>
+    {% endif %}
+    <a href="/">Back to Home</a>
+</body>
+</html>
+

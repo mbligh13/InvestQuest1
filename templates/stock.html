@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Info</title>
+</head>
+<body>
+    <h1>Stock Information for {{ symbol }}</h1>
+    {% if info %}
+        <p><strong>Price:</strong> {{ info['regularMarketPrice'] }}</p>
+        <p><strong>Previous Close:</strong> {{ info['regularMarketPreviousClose'] }}</p>
+        <p><strong>Market Cap:</strong> {{ info['marketCap'] }}</p>
+    {% else %}
+        <p>No information available for this stock.</p>
+    {% endif %}
+    <a href="/">Back to Home</a>
+</body>
+</html>
