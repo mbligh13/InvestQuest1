@@ -182,6 +182,7 @@ def calculate_insights(portfolio_data):
     total_sold = sum(float(entry[ 'price_sold' ]) for entry in portfolio_data if entry[ 'price_sold' ])
     total_profit = total_sold - total_investment
 
+
     if total_investment > 0:
         profit_percentage = (total_profit / total_investment) * 100
     else:
