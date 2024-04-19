@@ -2,20 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
-    <h1>Welcome, {{ username }}!</h1>
-        <!-- Logout Button -->
-        <form action="{{ url_for('logout') }}" method="post" style="display: inline;">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trader Portfolio Data Entry</title>
+    <!-- Logout Button -->
+    <form action="{{ url_for('logout') }}" method="post" style="display: inline;">
             <button type="submit">Logout</button>
-        </form>
+    </form>
 </head>
 <body>
     <h1>Welcome, {{ username }}!</h1>
+    <h1>Please enter your portfolio data</h1>
     <p>This is your personal dashboard.</p>
-    <form action="/search_stocks" method="post">
-        <input type="text" name="symbol" placeholder="Enter Stock Symbol" required>
-        <button type="submit">Get Stock Info</button>
+    <form action="your-portfolio" method="post" enctype="multipart/form-data">
+        <div id="manual-entry">
+            <div class="entry">
+                <label for="stock">Stock Ticker</label>
+                <input type="text" name="stock[]" required>
+                <br>
+                <label for="date_bought">Date Bought</label>
+                <input type="date" name="date_bought[]" required>
+                <br>
+                <label for="price_bought">Price Bought</label>
+                <input type="number" name="price_bought[]" required>
+                <br>
+                <label for="date_sold">Date Sold</label>
+                <input type="date" name="date_sold[]">
+                <br>
+                <label for="price_sold">Price Sold</label>
+                <input type="number" name="price_sold[]">
+                <br>
+            </div>
+        </div>
+        <button type="button" id="add-entry">Add Entry</button>
+        <br>
+        <label for="file">Upload CSV Data</label>
+        <input type="file" name="file">
+        <br>
+        <input type="submit" value="Submit">
     </form>
+
+    <script>
+        document.getElementById("add-entry").addEventListener("click", function() {
+            var entry = document.querySelector(".entry").cloneNode(true);
+            document.getElementById("manual-entry").appendChild(entry);
+        });
+    </script>
 </body>
 </html>
 
