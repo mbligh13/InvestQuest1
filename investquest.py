@@ -3,10 +3,12 @@ from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 import yfinance as yf
+
+
 app = Flask(__name__)
 
 
-def CORS(app):
+def CORS(application):
     pass
 
 
@@ -24,9 +26,11 @@ class User(db.Model):
     username = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
 
+
 @app.route('/')
 def login():
     return render_template('login.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_post():
@@ -36,10 +40,11 @@ def login_post():
         user = User.query.filter_by(username=username).first()
         if user and bcrypt.check_password_hash(user.password, password):
             session['username'] = user.username
-            return redirect(url_for('home'))
+            return redirect(url_for('home_portfolio'))
         else:
             flash('Invalid username or password')
     return render_template('login.html')
+
 
 @app.route('/create_account', methods=['GET', 'POST'])
 def create_account():
@@ -50,8 +55,9 @@ def create_account():
         new_user = User(username=username, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
-        return redirect(url_for('home'))
+        return redirect(url_for('home_portfolio'))
     return render_template('create_account.html')
+
 
 @app.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
@@ -60,12 +66,14 @@ def reset_password():
         return redirect(url_for('login'))
     return render_template('reset_password.html')
 
-@app.route('/home', methods=['GET', 'POST'])
-def home():
+
+@app.route('/home_portfolio', methods=['GET', 'POST'])
+def home_portfolio():
     if 'username' not in session:
         flash('You are not logged in!')
         return redirect(url_for('login'))
-    return render_template('home.html', username=session['username'])
+    return render_template('home_portfolio.html', username=session['username'])
+
 
 @app.route('/search_stocks', methods=['POST'])
 def search_stocks():
@@ -80,11 +88,13 @@ def search_stocks():
 
     return render_template('stock_info.html', info=info)
 
+
 @app.route('/logout')
 def logout():
     session.clear()
     flash('You have been logged out.')
     return redirect(url_for('login'))
+
 
 if __name__ == '__main__':
     with app.app_context():
