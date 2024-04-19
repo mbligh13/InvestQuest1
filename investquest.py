@@ -4,11 +4,10 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 import yfinance as yf
 
-
 app = Flask(__name__)
 
 
-def CORS(application):
+def CORS(app):
     pass
 
 
@@ -27,6 +26,13 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
 
 
+app.config.update(
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Lax',
+)
+
+
 @app.route('/')
 def login():
     return render_template('login.html')
@@ -40,7 +46,7 @@ def login_post():
         user = User.query.filter_by(username=username).first()
         if user and bcrypt.check_password_hash(user.password, password):
             session['username'] = user.username
-            return redirect(url_for('home_portfolio'))
+            return redirect(url_for('home'))
         else:
             flash('Invalid username or password')
     return render_template('login.html')
@@ -54,8 +60,16 @@ def create_account():
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
         new_user = User(username=username, password=hashed_password)
         db.session.add(new_user)
-        db.session.commit()
-        return redirect(url_for('home_portfolio'))
+        try:
+            db.session.commit()
+            # Log the user in by setting the session variables
+            session['username'] = username
+            flash('Account created successfully! Welcome, {}!'.format(username))
+            return redirect(url_for('home'))
+        except:
+            db.session.rollback()
+            flash('Error creating account. Please try again.')
+            return redirect(url_for('create account'))
     return render_template('create_account.html')
 
 
@@ -67,12 +81,13 @@ def reset_password():
     return render_template('reset_password.html')
 
 
-@app.route('/home_portfolio', methods=['GET', 'POST'])
-def home_portfolio():
+@app.route('/home')
+def home():
     if 'username' not in session:
-        flash('You are not logged in!')
+        flash('Please log in to view this page.')
         return redirect(url_for('login'))
-    return render_template('home_portfolio.html', username=session['username'])
+    username = session['username']
+    return render_template('home.html', username=username)
 
 
 @app.route('/search_stocks', methods=['POST'])
@@ -89,7 +104,7 @@ def search_stocks():
     return render_template('stock_info.html', info=info)
 
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 def logout():
     session.clear()
     flash('You have been logged out.')
