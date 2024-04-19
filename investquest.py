@@ -103,11 +103,14 @@ def process_portfolio_data():
         tickers = request.form.getlist('stock[]')
         print(tickers)
         dates_bought = request.form.getlist('date_bought[]')
+        print(dates_bought)
         prices_bought = request.form.getlist('price_bought[]')
+        print(prices_bought)
         dates_sold = request.form.getlist('date_sold[]')
         prices_sold = request.form.getlist('price_sold[]')
         portfolio_data = process_manual_entry(tickers, dates_bought, prices_bought, dates_sold, prices_sold)
     insights_data = calculate_insights(portfolio_data)
+    print(insights_data)
 
     # Inside your process_portfolio_data route
     return render_template('portfolio_insights.html', total_investment=insights_data['total_investment'],
@@ -173,7 +176,6 @@ def process_manual_entry(tickers, dates_bought, prices_bought, dates_sold, price
         }
         portfolio_data.append(entry)
     return portfolio_data
-
 
 
 # Function to calculate personalized insights
