@@ -175,6 +175,7 @@ def process_manual_entry(tickers, dates_bought, prices_bought, dates_sold, price
     return portfolio_data
 
 
+
 # Function to calculate personalized insights
 def calculate_insights(portfolio_data):
     print(portfolio_data)
