@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Insights</title>
+    <style>
+        /* Add your CSS styles here */
+    </style>
+</head>
+<body>
+    <h1>Portfolio Insights</h1>
+
+    <h2>Total Investment: ${{ total_profit }}</h2>
+    <h2>Total Sold: ${{ total_sold }}</h2>
+    <h2>Total Profit: ${{ total_profit }}</h2>
+
+    <p>{{ analysis }}</p>
+
+    <h2>Portfolio Data</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Ticker</th>
+                <th>Date Bought</th>
+                <th>Price Bought</th>
+                <th>Date Sold</th>
+                <th>Price Sold</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in portfolio_data %}
+            <tr>
+                <td>{{ entry.ticker }}</td>
+                <td>{{ entry.date_bought }}</td>
+                <td>{{ entry.price_bought }}</td>
+                <td>{{ entry.date_sold }}</td>
+                <td>{{ entry.price_sold }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
