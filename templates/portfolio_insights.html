@@ -11,9 +11,10 @@
 <body>
     <h1>Portfolio Insights</h1>
 
-    <h2>Total Investment: ${{ total_profit }}</h2>
+    <h2>Total Investment: ${{ total_investment }}</h2>
     <h2>Total Sold: ${{ total_sold }}</h2>
     <h2>Total Profit: ${{ total_profit }}</h2>
+    <h2>Percentage Difference: {{ percentage }}%</h2>
 
     <p>{{ analysis }}</p>
 
@@ -36,6 +37,26 @@
                 <td>{{ entry.price_bought }}</td>
                 <td>{{ entry.date_sold }}</td>
                 <td>{{ entry.price_sold }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Index Data</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Index</th>
+                <th>Price</th>
+                <th>Change</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for index_name, index_info in index_data.items() %}
+            <tr>
+                <td>{{ index_name }}</td>
+                <td>{{ index_info['regularMarketPrice'] }}</td>
+                <td>{{ index_info['change'] }}</td>
             </tr>
             {% endfor %}
         </tbody>
