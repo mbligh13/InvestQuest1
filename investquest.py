@@ -8,6 +8,53 @@ import csv
 app = Flask(__name__)
 
 
+# Function to get real-time stock data
+def get_stock_data(symbol):
+    try:
+        # Get stock data using yfinance
+        stock = yf.Ticker(symbol)
+        stock_data = stock.info
+        return stock_data
+    except Exception as e:
+        return {"error": str(e)}
+
+
+# Function to fetch data for common indexes
+def get_index_data():
+    indexes = {
+        'S&P 500': '^GSPC',
+        'Dow Jones Industrial Average': '^DJI',
+        'Nasdaq Composite': '^IXIC'
+    }
+    index_data = {}
+    for name, symbol in indexes.items():
+        data = get_stock_data(symbol)
+        print(data)
+
+        if 'error' not in data:
+            index_data[name] = data
+            # index_data[name]['regularMarketPrice'] = (data['ask'] + data['bid']) * 0.5
+    index_data['S&P 500']['regularMarketPrice'] = (index_data['S&P 500']['ask'] + index_data['S&P 500']['bid'])*0.5
+
+    index_data['Dow Jones Industrial Average']['regularMarketPrice'] = \
+        (index_data['Dow Jones Industrial Average']['ask'] + index_data['Dow Jones Industrial Average']['bid']) * 0.5
+
+    index_data['Nasdaq Composite']['regularMarketPrice'] = \
+        index_data['Nasdaq Composite']['regularMarketOpen']
+
+    index_data['S&P 500']['change'] = (index_data['S&P 500']['regularMarketPrice'] -
+                                       index_data['S&P 500']['previousClose']) * 100 / index_data['S&P 500']['regularMarketPrice']
+
+    index_data['Dow Jones Industrial Average']['change'] = \
+        (index_data['Dow Jones Industrial Average']['regularMarketPrice'] -
+         index_data['Dow Jones Industrial Average']['previousClose']) * 100 / index_data['Dow Jones Industrial Average']['regularMarketPrice']
+
+    index_data['Nasdaq Composite']['change'] = \
+        (index_data['Nasdaq Composite']['regularMarketPrice']-index_data['Nasdaq Composite']['previousClose'])*100 / index_data['Nasdaq Composite']['regularMarketPrice']
+
+    return index_data
+
+
 def CORS(app):
     pass
 
@@ -47,7 +94,7 @@ def login_post():
         user = User.query.filter_by(username=username).first()
         if user and bcrypt.check_password_hash(user.password, password):
             session['username'] = user.username
-            print("login successful")
+            # print("login successful")
             return redirect(url_for('home_portfolio'))
         else:
             flash('Invalid username or password')
@@ -101,18 +148,21 @@ def process_portfolio_data():
     else:
         # Manual entry case
         tickers = request.form.getlist('stock[]')
-        print(tickers)
         dates_bought = request.form.getlist('date_bought[]')
         prices_bought = request.form.getlist('price_bought[]')
         dates_sold = request.form.getlist('date_sold[]')
         prices_sold = request.form.getlist('price_sold[]')
         portfolio_data = process_manual_entry(tickers, dates_bought, prices_bought, dates_sold, prices_sold)
+    index_data = get_index_data()
     insights_data = calculate_insights(portfolio_data)
 
     # Inside your process_portfolio_data route
     return render_template('portfolio_insights.html', total_investment=insights_data['total_investment'],
                            total_sold=insights_data['total_sold'], total_profit=insights_data['total_profit'],
-                           analysis=insights_data['analysis'], portfolio_data=portfolio_data)
+                           percentage= insights_data['profit_percentage'], analysis=insights_data['analysis'],
+                           portfolio_data=portfolio_data, index_data=index_data)
+
+
 
 
 @app.route('/search_stocks', methods=['POST'])
@@ -175,14 +225,11 @@ def process_manual_entry(tickers, dates_bought, prices_bought, dates_sold, price
     return portfolio_data
 
 
-
 # Function to calculate personalized insights
 def calculate_insights(portfolio_data):
-    print(portfolio_data)
     total_investment = sum(float(entry[ 'price_bought' ]) for entry in portfolio_data)
     total_sold = sum(float(entry[ 'price_sold' ]) for entry in portfolio_data if entry[ 'price_sold' ])
     total_profit = total_sold - total_investment
-
 
     if total_investment > 0:
         profit_percentage = (total_profit / total_investment) * 100
