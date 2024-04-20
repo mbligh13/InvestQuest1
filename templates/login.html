@@ -4,37 +4,81 @@
     <meta charset="UTF-8">
     <title>Login</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        form { margin: auto; width: 300px; padding: 1em; border: 1px solid #ccc; border-radius: 1em; }
-        ul { list-style: none; padding: 0; }
-        li { margin: 1em 0; }
-        label { display: inline-block; width: 90px; text-align: right; }
-        input, button { font: 1em sans-serif; width: 160px; box-sizing: border-box; border: 1px solid #999; }
-        button { width: auto; padding: 0.5em; }
-        .center { text-align: center; }
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        form {
+            margin-top: 20px;
+            width: 300px;
+            padding: 1em;
+            border: 1px solid #ccc;
+            border-radius: 1em;
+            text-align: center;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin: 1em 0;
+        }
+        label {
+            display: inline-block;
+            width: 90px;
+            text-align: right;
+        }
+        input, button {
+            font: 1em sans-serif;
+            width: 160px;
+            box-sizing: border-box;
+            border: 1px solid #999;
+        }
+        button {
+            width: auto;
+            padding: 0.5em;
+        }
+        .center {
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
-    <form action="/login" method="POST">
-        <ul>
-            <li>
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
-            </li>
-            <li>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </li>
-            <li class="center">
-                <button type="submit">Login</button>
-            </li>
-            <li class="center">
-                <a href="/create_account">Create Account</a> | <a href="/reset_password">Reset Password</a>
-            </li>
-        </ul>
-    </form>
+    <div class="login-container">
+        <img src="https://i.postimg.cc/SKM2DCQ6/DALL-E-2024-04-19-21-03-15-Create-an-image-of-a-logo-with-the-words-INVESTQUEST-under-a-stylized.png" alt="InvestQuest Logo">
+
+        <form action="/login" method="POST">
+            <ul>
+                <li>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                </li>
+                <li>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </li>
+                <li class="center">
+                    <button type="submit">Login</button>
+                </li>
+                <li class="center">
+                    <a href="/create_account">Create Account</a> | <a href="/reset_password">Reset Password</a>
+                </li>
+            </ul>
+        </form>
+    </div>
 </body>
 </html>
+
 
 
 

@@ -1,11 +1,67 @@
 
-<h1>Create Account</h1>
-<form action="/create_account" method="post">
-    <input type="text" name="username" placeholder="Username" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <input type="password" name="confirm_password" placeholder="Re-enter Password" required>
-    <button type="submit">Create Account</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Account</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 1em; /* Provide spacing between the title and the form */
+        }
+        form {
+            background: white;
+            padding: 2em;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px; /* Creates consistent space between form items */
+        }
+        input, button {
+            padding: 10px;
+            margin: 0; /* Remove default margin */
+            width: 100%; /* Full width to fill the form */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            cursor: pointer;
+            background-color: #5c67f2;
+            color: white;
+            border: none;
+        }
+        button:hover {
+            background-color: #4a54e1; /* Slightly darker shade on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>Create Account</h1>
+    <form action="/create_account" method="post">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="password" name="confirm_password" placeholder="Re-enter Password" required>
+        <button type="submit">Create Account</button>
+    </form>
+    <form action="{{ url_for('logout') }}" method="post">
+        <button type="submit">Logout</button>
+    </form>
+</body>
+</html>
+
 
 
 
