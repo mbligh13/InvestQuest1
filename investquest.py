@@ -19,8 +19,6 @@ def get_stock_data(symbol):
         return {"error": str(e)}
 
 
-
-
 # Function to fetch data for common indexes
 def get_index_data():
     indexes = {
@@ -31,8 +29,6 @@ def get_index_data():
     index_data = {}
     for name, symbol in indexes.items():
         data = get_stock_data(symbol)
-        print(data)
-
         if 'error' not in data:
             index_data[name] = data
             # index_data[name]['regularMarketPrice'] = (data['ask'] + data['bid']) * 0.5
@@ -57,11 +53,6 @@ def get_index_data():
     return index_data
 
 
-def CORS(app):
-    pass
-
-
-CORS(app)
 app.config[
     'SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://admin:Investquest1!@investquest.c3o4s6swwij8.us-east-2.rds.amazonaws.com:3306/user_management'
 app.config['SECRET_KEY'] = 'f3fe6d8491d6d0747213334e3df343bb'

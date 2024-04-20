@@ -4,17 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio Insights</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f9f9f9;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
+            color: #333;
         }
         .container {
             text-align: center;
@@ -22,78 +24,102 @@
             padding: 20px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             border-radius: 8px;
-            width: 80%;
-            max-width: 600px;
+            width: 90%;
+            max-width: 800px;
+            margin: 20px;
         }
-        label {
-            display: block;
-            margin-top: 10px;
+        h1, h2 {
+            margin-top: 20px;
+            color: #0066ff;
         }
-        input, button {
-            margin-top: 5px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
-        button {
-            cursor: pointer;
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
         }
-        .entry:not(:first-of-type) {
-            border-top: 2px solid #eee;
-            padding-top: 10px;
-            margin-top: 10px;
+        th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+        .analysis {
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>Portfolio Insights</h1>
+    <div class="container">
+        <h1>Portfolio Insights</h1>
 
-    <h2>Total Investment: ${{ total_investment }}</h2>
-    <h2>Total Sold: ${{ total_sold }}</h2>
-    <h2>Total Profit: ${{ total_profit }}</h2>
-    <h2>Percentage Difference: {{ percentage }}%</h2>
+        <h2>Total Investment: ${{ total_investment }}</h2>
+        <h2>Total Sold: ${{ total_sold }}</h2>
+        <h2>Total Profit: ${{ total_profit }}</h2>
+        <h2>Percentage Difference: {{ percentage }}%</h2>
 
-    <p>{{ analysis }}</p>
+        <p class="analysis">{{ analysis }}</p>
 
-    <h2>Portfolio Data</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Ticker</th>
-                <th>Date Bought</th>
-                <th>Price Bought</th>
-                <th>Date Sold</th>
-                <th>Price Sold</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for entry in portfolio_data %}
-            <tr>
-                <td>{{ entry.ticker }}</td>
-                <td>{{ entry.date_bought }}</td>
-                <td>{{ entry.price_bought }}</td>
-                <td>{{ entry.date_sold }}</td>
-                <td>{{ entry.price_sold }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <h2>Portfolio Data</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Ticker</th>
+                    <th>Date Bought</th>
+                    <th>Price Bought</th>
+                    <th>Date Sold</th>
+                    <th>Price Sold</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in portfolio_data %}
+                <tr>
+                    <td>{{ entry.ticker }}</td>
+                    <td>{{ entry.date_bought }}</td>
+                    <td>{{ entry.price_bought }}</td>
+                    <td>{{ entry.date_sold }}</td>
+                    <td>{{ entry.price_sold }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <h2>Index Data</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Index</th>
-                <th>Price</th>
-                <th>Change</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for index_name, index_info in index_data.items() %}
-            <tr>
-                <td>{{ index_name }}</td>
-                <td>{{ index_info['regularMarketPrice'] }}</td>
-                <td>{{ index_info['change'] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <h2>Index Data</h2>
+        <table id="indexTable">
+            <thead>
+                <tr>
+                    <th>Index</th>
+                    <th>Price</th>
+                    <th>Change</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for index_name, index_info in index_data.items() %}
+                <tr>
+                    <td>{{ index_name }}</td>
+                    <td class="price">{{ index_info['regularMarketPrice'] }}</td>
+                    <td class="change">{{ index_info['change'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Format index values
+        document.addEventListener("DOMContentLoaded", function () {
+            var priceCells = document.querySelectorAll("#indexTable .price");
+            var changeCells = document.querySelectorAll("#indexTable .change");
+
+            priceCells.forEach(function (cell) {
+                cell.textContent = "$" + parseFloat(cell.textContent).toFixed(2);
+            });
+
+            changeCells.forEach(function (cell) {
+                cell.textContent = parseFloat(cell.textContent).toFixed(2) + "%";
+            });
+        });
+    </script>
 </body>
 </html>
